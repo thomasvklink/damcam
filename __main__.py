@@ -1,8 +1,9 @@
-#AI Practise Final project by Thomas van Klink & Tristan van Marle
-#Made 17-01-2022
+# AI Practise Final project by Thomas van Klink & Tristan van Marle
+# Made 17-01-2022
 
 import pygame
 from checkers.constants import WIDTH, HEIGHT
+from checkers. board import Board
 
 FPS = 60
 
@@ -13,6 +14,7 @@ pygame.display.set_caption('Checkers')
 def main():
     run = True
     clock = pygame.time.Clock()
+    board = Board()
 
     while run:
         clock.tick(FPS)
@@ -21,8 +23,11 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
 
-            # if event.type = pygame.MOUSEBUTTONDOWN:
-            #     pass
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pass
+
+        board.draw(WIN)
+        pygame.display.update()
 
     pygame.quit()
 
