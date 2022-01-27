@@ -4,15 +4,17 @@
 
 # Importing variables
 import pygame
-from checkers.constants import WIDTH, HEIGHT, SQUARE_SIZE, RED, WHITE
-from checkers.game import Game
-from minimax.algorithm import minimax
+from constants import WIDTH, HEIGHT, SQUARE_SIZE, WHITE
+from game import Game
+from algorithm import minimax
+import input
+
 
 # Setting variables for pygame
 FPS = 60
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Checkers')
-
+print(FPS)
 # method for returning on which row and column the mouse is
 def get_row_col_from_mouse(pos):
     x, y = pos
@@ -27,6 +29,7 @@ def main():
     game = Game(WIN)
 
     while run:
+        print("run")
         clock.tick(FPS)
 
         if game.turn == WHITE:
@@ -35,7 +38,7 @@ def main():
 
         if game.winner() != None:
             print(game.winner())
-            run = False
+            # run = False
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -50,5 +53,8 @@ def main():
 
     pygame.quit()
 
-#Run the main method
-main()
+
+
+if __name__=="__main__":
+    print("HALLO!")
+    main()

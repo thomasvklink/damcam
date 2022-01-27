@@ -1,6 +1,6 @@
 # This is a class for the checkers pieces of both players
 
-from .constants import RED, WHITE, SQUARE_SIZE, GREY, CROWN
+from constants import SQUARE_SIZE, GREY, CROWN
 import pygame
 
 
@@ -38,3 +38,6 @@ class Piece:
 
     def __repr__(self):
         return str(self.color)
+
+if __name__=="__main__":
+    print("HALLO!")

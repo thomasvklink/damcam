@@ -3,7 +3,7 @@
 # Importing variables
 from copy import deepcopy
 import pygame
-
+print("algoritm")
 # Creating color variables
 RED = (255, 0, 0)
 WHITE = (255, 255, 255)

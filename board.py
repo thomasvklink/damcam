@@ -1,8 +1,9 @@
 # This is a class for the checkers board
-
 import pygame
-from .constants import BLACK, ROWS, RED, SQUARE_SIZE, COLS, WHITE
-from .piece import Piece
+from constants import BLACK, ROWS, RED, SQUARE_SIZE, COLS, WHITE
+from piece import Piece
+
+import math
 
 
 class Board:
@@ -184,3 +185,8 @@ class Board:
             right += 1
 
         return moves
+
+    def combine_input(self):
+        # if there is a white piece do not override the board \ else do override and check if there is a piece in that square
+        math.map()
+        pass

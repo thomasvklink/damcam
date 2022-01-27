@@ -1,7 +1,7 @@
 # This is a class responsible for handling game events
 import pygame
-from .constants import RED, WHITE, BLUE, SQUARE_SIZE, GREEN
-from checkers.board import Board
+from constants import RED, WHITE, BLUE, SQUARE_SIZE
+from board import Board
 
 
 class Game:
