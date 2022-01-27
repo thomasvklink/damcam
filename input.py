@@ -8,6 +8,10 @@ param2 = 50
 minRadius = 20
 maxRadius = 135
 
+# Checkerboard parameter
+size = 8
+squares = size * size
+
 # Define which webcam input you use
 webcam = 0
 webcam_width = 1280
@@ -16,6 +20,13 @@ webcam_height = 720
 # Definitions for Logitech HD720
 board_size = 720
 offset = 1280/4-30
+
+# Create dictionary for board state
+board = {}
+keys = range(squares)
+values = [0 for i in range(squares)]
+for i in keys:
+    board[i] = values[i]
 
 def continuous_detection():
 
@@ -40,6 +51,7 @@ def continuous_detection():
     while True:
         # Read webcam input
         # output = cap.read()[1]
+        # FOR DEVELOPMENT
         output = cv2.imread('webcam-image.png')
         # Process image
         grey = cv2.cvtColor(output, cv2.COLOR_BGR2GRAY)
@@ -128,15 +140,16 @@ def save():
 # Overlay a grid of lines representing the checker board, can be used to align the camera
 # Takes grid size (IxI), input image and offset to center the board on the image
 def add_grid(size, input, offset):
-    number = 0
     grid_size = board_size/size
+    # Draw board over webcam view
     for i in range(size+1):
         cv2.line(input, (int(((board_size / size) * i)+offset), 0), (int(((board_size / size) * i)+offset), board_size), (0, 0, 255), 3, 3)
         cv2.line(input, (int(offset), int((board_size / size) * i)), (int(board_size+offset), int((board_size / size) * i)), (0, 0, 255), 3, 3)
+    # Add square numbers on the board
     for x in range(size):
         for y in range(size):
             count = y + size * (x)
-            cv2.putText(input, str(count+1), (int((grid_size/2-20) + offset + (grid_size*x)), int(60 + grid_size*y)), cv2.FONT_HERSHEY_COMPLEX, 1.1, (255, 255, 255), 2)
+            cv2.putText(input, str(count), (int((grid_size/2-20) + offset + (grid_size*x)), int(60 + grid_size*y)), cv2.FONT_HERSHEY_COMPLEX, 1.1, (255, 255, 255), 2)
 
 
 # Check if a circle is inside of the checker board grid
@@ -153,21 +166,16 @@ def check_grid(size, input, offset, circles):
                     end_pos_x = offset + grid_size
                     start_pos_y = 0
                     end_pos_y = grid_size
+                    count = y + size * x
                     # For every square in the grid move detection statement by the step size of the grid
                     if i[0] > start_pos_x+(grid_size*x) and i[0] < end_pos_x + (grid_size*x) and i[1] > start_pos_y + (grid_size*y) and i[1] < end_pos_y + (grid_size*y):
                         # Draw a green highlight over a square that has a circle in it
                         cv2.rectangle(input, (int(start_pos_x + (grid_size*x)), int(grid_size*y), int(grid_size), int(grid_size)), (0, 255, 0), 3)
-
-
-# Safe the detected grid into a format that can be used in the game
-def save_grid(size):
-    squares = size*size
-    board = {}
-    keys = range(squares)
-    values = ["Hi", "I", "am", "John"]
-    for i in keys:
-        board[i] = values[i]
-    print(board)
+                        # Update board dictionary accordingly
+                        board[count] = 1
+                    else:
+                        # If no circle is detected within a board square update the board dictionary accordingly
+                        board[count] = 0
 
 # Keyboard control
 while True:
@@ -180,9 +188,6 @@ while True:
     elif keyboard.is_pressed('w'):
         print("\nSaving image from webcam...")
         save()
-    elif keyboard.is_pressed('b'):
-        print("\nSaving board...")
-        save_grid(8)
 
 
 
