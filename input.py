@@ -39,7 +39,8 @@ def continuous_detection():
 
     while True:
         # Read webcam input
-        output = cap.read()[1]
+        # output = cap.read()[1]
+        output = cv2.imread('webcam-image.png')
         # Process image
         grey = cv2.cvtColor(output, cv2.COLOR_BGR2GRAY)
         blur1 = cv2.GaussianBlur(grey, (25, 25), cv2.BORDER_DEFAULT)
@@ -113,12 +114,30 @@ def single_detection():
     cap.release()
     cv2.destroyAllWindows()
 
+def save():
+    # Open webcam capture
+    cap = cv2.VideoCapture(webcam)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, webcam_width)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, webcam_height)
+
+    image = cap.read()[1]
+    cv2.imwrite('webcam-image.png', image)
+    print("Saved image.")
+    cap.release()
+
 # Overlay a grid of lines representing the checker board, can be used to align the camera
 # Takes grid size (IxI), input image and offset to center the board on the image
 def add_grid(size, input, offset):
+    number = 0
+    grid_size = board_size/size
     for i in range(size+1):
         cv2.line(input, (int(((board_size / size) * i)+offset), 0), (int(((board_size / size) * i)+offset), board_size), (0, 0, 255), 3, 3)
         cv2.line(input, (int(offset), int((board_size / size) * i)), (int(board_size+offset), int((board_size / size) * i)), (0, 0, 255), 3, 3)
+    for x in range(size):
+        for y in range(size):
+            count = y + size * (x)
+            cv2.putText(input, str(count+1), (int((grid_size/2-20) + offset + (grid_size*x)), int(60 + grid_size*y)), cv2.FONT_HERSHEY_COMPLEX, 1.1, (255, 255, 255), 2)
+
 
 # Check if a circle is inside of the checker board grid
 def check_grid(size, input, offset, circles):
@@ -139,9 +158,16 @@ def check_grid(size, input, offset, circles):
                         # Draw a green highlight over a square that has a circle in it
                         cv2.rectangle(input, (int(start_pos_x + (grid_size*x)), int(grid_size*y), int(grid_size), int(grid_size)), (0, 255, 0), 3)
 
+
 # Safe the detected grid into a format that can be used in the game
-def safe_grid():
-    pass
+def save_grid(size):
+    squares = size*size
+    board = {}
+    keys = range(squares)
+    values = ["Hi", "I", "am", "John"]
+    for i in keys:
+        board[i] = values[i]
+    print(board)
 
 # Keyboard control
 while True:
@@ -151,6 +177,12 @@ while True:
     elif keyboard.is_pressed('s'):
         print("\nStarting single detection...")
         single_detection()
+    elif keyboard.is_pressed('w'):
+        print("\nSaving image from webcam...")
+        save()
+    elif keyboard.is_pressed('b'):
+        print("\nSaving board...")
+        save_grid(8)
 
 
 
