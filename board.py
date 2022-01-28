@@ -1,8 +1,8 @@
 # This is a class for the checkers board
 
 import pygame
-from .constants import BLACK, ROWS, RED, SQUARE_SIZE, COLS, WHITE
-from .piece import Piece
+from constants import BLACK, ROWS, RED, SQUARE_SIZE, COLS, WHITE
+from piece import Piece
 
 
 class Board:
@@ -41,8 +41,8 @@ class Board:
             else:
                 self.red_kings += 1
 
-    def get_piece(self, row, col):
-        return self.board[row][col]
+    def get_piece(self, row, col)-> Piece:
+        return self.board[int(row)][int(col)]
 
     def create_board(self):
         for row in range(ROWS):
@@ -90,27 +90,11 @@ class Board:
         row = piece.row
 
         if piece.color == RED or piece.king:
-            # while piece == 0 or row <= ROWS or row >= -1 or self.skip_check <= 1:
-            #     left += piece.col - 1
-            #     right += piece.col + 1
-            # if piece != 0:
-            #     self.skip_check + 1
             moves.update(self._traverse_left(row - 1, max(row - 3, -1), -1, piece.color, left))
             moves.update(self._traverse_right(row - 1, max(row - 3, -1), -1, piece.color, right))
         if piece.color == WHITE or piece.king:
             moves.update(self._traverse_left(row + 1, min(row + 3, ROWS), 1, piece.color, left))
             moves.update(self._traverse_right(row + 1, min(row + 3, ROWS), 1, piece.color, right))
-
-        # if piece.king:
-        #     while piece == 0 or ROWS or -1 or self.skip_check <= 1:
-        #         left+1
-        #         right+1
-        #     if piece != 0:
-        #         self.skip_check + 1
-        #     moves.update(self._traverse_left(row - 1, max(row - 3, -1), -1, piece.color, left))
-        #     moves.update(self._traverse_right(row - 1, max(row - 3, -1), -1, piece.color, right))
-        #     moves.update(self._traverse_left(row + 1, min(row + 3, ROWS), 1, piece.color, left))
-        #     moves.update(self._traverse_right(row + 1, min(row + 3, ROWS), 1, piece.color, right))
 
         return moves
 
@@ -168,7 +152,6 @@ class Board:
                     moves[(r, right)] = jump
 
                 if jump:
-                    # moves.clear()
                     if step == -1:
                         row = max(r - 3, -1)
                     else:
@@ -184,3 +167,10 @@ class Board:
             right += 1
 
         return moves
+
+    def get_row_col_from_pos(self, pos):
+        row = pos[1]/SQUARE_SIZE-1
+        col = pos[0]/SQUARE_SIZE-1
+        return row, col
+
+

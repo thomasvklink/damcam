@@ -9,7 +9,7 @@ RED = (255, 0, 0)
 WHITE = (255, 255, 255)
 
 # Method for creating the minmax algorithm
-def minimax(position, depth, max_player, game):
+def minmax(position, depth, max_player, game):
     if depth == 0 or position.winner() != None:
         return position.evaluate(), position
 
@@ -17,7 +17,7 @@ def minimax(position, depth, max_player, game):
         max_eval = float('-inf')
         best_move = None
         for move in get_all_moves(position, WHITE, game):
-            evaluation = minimax(move, depth - 1, False, game)[0]
+            evaluation = minmax(move, depth - 1, False, game)[0]
             max_eval = max(max_eval, evaluation)
             if max_eval == evaluation:
                 best_move = move
@@ -27,7 +27,7 @@ def minimax(position, depth, max_player, game):
         min_eval = float('inf')
         best_move = None
         for move in get_all_moves(position, RED, game):
-            evaluation = minimax(move, depth - 1, True, game)[0]
+            evaluation = minmax(move, depth - 1, True, game)[0]
             min_eval = min(min_eval, evaluation)
             if min_eval == evaluation:
                 best_move = move
